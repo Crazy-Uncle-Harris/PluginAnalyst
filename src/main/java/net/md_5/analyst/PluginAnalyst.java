@@ -17,6 +17,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +49,12 @@ public class PluginAnalyst {
             put(51, "JDK 1.7");
         }
     };
+    private static final Comparator<Integer> reverseIntegerComparator = new Comparator<Integer>() {
+        @Override
+        public int compare(Integer o1, Integer o2) {
+            return o2.compareTo(o1);
+        }
+    };
     /*========================================================================*/
     private static int dlCount;
 
@@ -71,7 +78,7 @@ public class PluginAnalyst {
                 ReferenceData.add(tally, o);
             }
         }
-        tally = MapSorter.valueSortedMap(tally);
+        tally = MapSorter.valueSortedMap(tally, reverseIntegerComparator);
 
         try (PrintWriter fr = new PrintWriter("methods.log")) {
             for (Map.Entry<Ownable, Integer> e : tally.entrySet()) {
